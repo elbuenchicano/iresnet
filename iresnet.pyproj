@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>f4c3357a-dd12-43eb-b5a5-55c8cd2df35d</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>iresnet.py</StartupFile>
+    <StartupFile>server.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,7 +22,10 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="iresnet.py" />
+    <Compile Include="engine.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="server.py" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="CondaEnv|CondaEnv|diplomado" />
