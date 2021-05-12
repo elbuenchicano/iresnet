@@ -1,6 +1,21 @@
 import numpy as np
 import PIL
 
+import  base64
+import  re
+import  io
+
+from    PIL     import Image
+
+def getI420FromBase64(codec, ticket, image_path=''):
+    base64_data = re.sub('^data:image/.+;base64,', '', codec)
+    byte_data   = base64.b64decode(base64_data)
+    image_data  = io.BytesIO(byte_data)
+    img         = Image.open(image_data)
+    
+    img.save(image_path + 'img_' + str(ticket) +'.png', "PNG")
+    ticket += 1
+
 
 ################################################################################
 ################################################################################
@@ -19,11 +34,6 @@ def queryStudents():
 def updateStudents(data):
     print(data)
     return data
-#...............................................................................
-################################################################################
-################################################################################
-# esta sección es para tener el código en mi pc y en el servidor
-
 
 #...............................................................................
 ################################################################################
