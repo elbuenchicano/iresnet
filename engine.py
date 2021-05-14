@@ -7,15 +7,17 @@ import  io
 
 from    PIL     import Image
 
-def getI420FromBase64(codec, ticket, image_path=''):
+################################################################################
+################################################################################
+def getI420FromBase64(codec):
     base64_data = re.sub('^data:image/.+;base64,', '', codec)
     byte_data   = base64.b64decode(base64_data)
     image_data  = io.BytesIO(byte_data)
     img         = Image.open(image_data)
-    
-    img.save(image_path + 'img_' + str(ticket) +'.png', "PNG")
-    ticket += 1
+    return img 
 
+    #img.save(image_path + 'img_' + str(ticket) +'.png', "PNG")
+    #ticket += 1
 
 ################################################################################
 ################################################################################
@@ -39,4 +41,6 @@ def updateStudents(data):
 ################################################################################
 ################################################################################
 def queryImage(data):
-    return data
+    codec = data[0]['image']
+    print(codec)
+    return {'a': 2}

@@ -11,7 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>iresnet</Name>
     <RootNamespace>iresnet</RootNamespace>
-    <InterpreterId>CondaEnv|CondaEnv|diplomado</InterpreterId>
+    <InterpreterId>CondaEnv|CondaEnv|faces</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,10 +25,16 @@
     <Compile Include="engine.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="faces.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="server.py" />
+    <Compile Include="utils.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="CondaEnv|CondaEnv|diplomado" />
+    <InterpreterReference Include="CondaEnv|CondaEnv|faces" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
