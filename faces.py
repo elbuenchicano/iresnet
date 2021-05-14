@@ -1,7 +1,6 @@
 import  torch
 import  numpy       as np
 import  torch.nn    as nn
-import  pandas      as pd
 from    torch.utils.data    import DataLoader
 from    torchvision         import transforms, datasets
 from    facenet_pytorch     import MTCNN, InceptionResnetV1
