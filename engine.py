@@ -1,11 +1,10 @@
-import numpy as np
-import PIL
-
+import  numpy   as  np
 import  base64
 import  re
 import  io
 
 from    PIL     import Image
+from    faces   import FaceRecognition
 
 ################################################################################
 ################################################################################
@@ -41,6 +40,8 @@ def updateStudents(data):
 ################################################################################
 ################################################################################
 def queryImage(data):
-    codec = data[0]['image']
-    print(codec)
-    return {'a': 2}
+    codec   = data[0]['image']
+    img     = getI420FromBase64(codec)
+    facer   = FaceRecognition()
+    return  facer.faceRecog(img)
+

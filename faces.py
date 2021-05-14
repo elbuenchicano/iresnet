@@ -121,13 +121,16 @@ class FaceRecognition:
 
             distances, indices = nbrs.kneighbors(embedding)
 
-            print(names[indices[0][0]])
+            data = {}
+            for i , j in enumerate(indices[0]):
+                data['nombre_' + str(i)]  = names[i] 
 
-        else:
-            print('')
+            return data
+        ##~~ 
+        return {}
 
 
-        #distances, indices = nbrs.kneighbors(a)
+        
 
         
         
