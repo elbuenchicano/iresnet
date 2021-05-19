@@ -122,7 +122,7 @@ class FaceRecognition:
 
             data = {}
             for i , j in enumerate(indices[0]):
-                data['nombre_' + str(i)]  = names[i] 
+                data['nombre_' + str(i)]  = names[j] 
 
             return data
         ##~~ 
