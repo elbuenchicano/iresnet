@@ -6,6 +6,9 @@ import  io
 from    PIL     import Image
 from    faces   import FaceRecognition
 
+
+facer   = FaceRecognition()
+
 ################################################################################
 ################################################################################
 def getI420FromBase64(codec):
@@ -42,6 +45,6 @@ def updateStudents(data):
 def queryImage(data):
     codec   = data[0]['image']
     img     = getI420FromBase64(codec)
-    facer   = FaceRecognition()
-    return  facer.faceRecog(img)
-
+    out     = facer.faceRecog(img)
+    print(out)
+    return  out
