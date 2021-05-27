@@ -10,15 +10,6 @@ from    sklearn.neighbors   import NearestNeighbors
 from    joblib              import dump, load
 
 
-
-
-# Define MTCNN module
-
-# Note that, since MTCNN is a collection of neural nets and other code, the
-# device must be passed in the following way to enable copying of objects when
-# needed internally.
-
-
 def cos_sim(a, b):
     """Takes 2 vectors a, b and returns the cosine similarity according 
     to the definition of the dot product"""
@@ -45,22 +36,6 @@ def whichDevice():
         device = "cpu"
     return device
 
-###############################################################################
-###############################################################################
-###############################################################################
-# getting the embeddings for the data set, remember the data set must contain
-# names in folders and images inside
-def faceRecog(img, embeddings):
-    device = whichDevice()
-    mtcnn = MTCNN(
-        image_size=160, margin=0, min_face_size=20,
-        thresholds=[0.6, 0.7, 0.7], factor=0.709, device=device
-    )
-    
-    model           = InceptionResnetV1(pretrained='vggface2').eval().to(device)
-    x_aligned, prob = mtcnn(x, return_prob=True)
-    embedding       = model(aligned)
-
 ################################################################################ 
 ################################################################################ 
 ################################################################################ 
@@ -73,6 +48,15 @@ class FaceRecognition:
         self.model      = InceptionResnetV1(pretrained='vggface2')
         self.model      = self.model.eval().to(self.device) 
         self.emb_path   = 'db/list'
+
+        try:
+            self.nbrs       = load(self.emb_path+'/nbrs.joblib') 
+            self.targets    = u_fileList2array(self.emb_path+'/targets.txt')
+            self.names      = u_loadJson(self.emb_path+'/names.txt')
+
+        except:
+            print('First define the embeddings' +
+                  'running getDbEmbeddings function')
 
     #..........................................................................
     # creating embeddings for the dataset
@@ -88,48 +72,38 @@ class FaceRecognition:
             x_aligned, prob = self.mtcnn(x, return_prob=True)
             if x_aligned is not None:
                 aligned.append(x_aligned)
-                names.append(dataset.idx_to_class[y])
 
         aligned     = torch.stack(aligned).to(self.device)
         embeddings  = self.model(aligned)
-    
-        # saving the names
         emb         = embeddings.cpu().detach().numpy()
-        
-        u_saveArray2File(self.emb_path+'/names.txt', names)
-        u_saveArrayTuple2File(self.emb_path+'/embs.txt', emb)
-
         nbrs        = NearestNeighbors(n_neighbors=2, algorithm='ball_tree').fit(emb)
 
-        # saving the neares neighbors model
+        # saving the neares neighbors model and other files
         dump(nbrs, self.emb_path+'/nbrs.joblib')
+        u_saveArray2File(self.emb_path+'/targets.txt', dataset.targets)
+        u_saveDict2File(self.emb_path+'/names.txt', dataset.idx_to_class)
+        u_saveArrayTuple2File(self.emb_path+'/embs.txt', emb)
         
     #..........................................................................
     # face recognition 
     # getting the embeddings for the data set, remember the data set must contain
     # names in folders and images inside
     def faceRecog(self, img):
-        nbrs            = load(self.emb_path+'/nbrs.joblib') 
-        names           = u_fileList2array(self.emb_path+'/names.txt')
         aligned, prob   = self.mtcnn(img, return_prob=True)
-        
+        data            = {'id': -1, 'dist': -1}
+       
         if aligned is not None:
             aligned     = aligned.unsqueeze(0).to(self.device)
             embedding   = self.model(aligned)
             embedding   = embedding.cpu().detach().numpy()                
 
-            distances, indices = nbrs.kneighbors(embedding)
+            distances, indices = self.nbrs.kneighbors(embedding)
+            
+            if len(distances) > 0: 
+                data['id']      = self.targets[indices[0][0]] 
+                data['dist']    = distances[0][0]
 
-            data = {}
-            for i , j in enumerate(indices[0]):
-                data['nombre_' + str(i)]  = names[j] 
-
-            return data
-        ##~~ 
-        return {}
-
-
-        
+        return data  
 
         
         

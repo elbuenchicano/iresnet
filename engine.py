@@ -5,7 +5,7 @@ import  io
 
 from    PIL     import Image
 from    faces   import FaceRecognition
-
+from    utils   import u_loadJson
 
 facer   = FaceRecognition()
 
@@ -28,12 +28,20 @@ def getI420FromBase64(codec):
 ################################################################################
 ################################################################################
 def queryStudents():
-    qr = []
-    for i in range(5):
-        qr.append( {'id': i, 'nombre': 'nombre_'+str(i), 
-                    'apellido': 'apellido_'+str(i), 'asistencia' : 0})
+    qr          = []
+    students    = u_loadJson('db/list/names.txt')
+
+    for id in students:
+        name    = students[id].split('_')
+        surname = name[1] if len(name) > 1 else ''
+
+        qr.append( {'id': id,
+                    'nombre': name[0],
+                    'apellido': surname,
+                    'asistencia' : 0} )
 
     return qr
+
 ################################################################################
 def updateStudents(data):
     print(data)
