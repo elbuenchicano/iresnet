@@ -100,10 +100,10 @@ class FaceRecognition:
             distances, indices = self.nbrs.kneighbors(embedding)
             
             if len(distances) > 0: 
-                data['id']      = self.targets[indices[0][0]] 
-                data['dist']    = distances[0][0]
+                data['id']      = int(self.targets[indices[0][0]]) 
+                data['dist']    = distances[0][0]   - 0.3 
 
-        return data  
+        return [data]  
 
         
         

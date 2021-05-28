@@ -35,11 +35,12 @@ def queryStudents():
         name    = students[id].split('_')
         surname = name[1] if len(name) > 1 else ''
 
-        qr.append( {'id': id,
+        qr.append( {'id': int(id),
                     'nombre': name[0],
                     'apellido': surname,
                     'asistencia' : 0} )
 
+    print(qr)
     return qr
 
 ################################################################################
